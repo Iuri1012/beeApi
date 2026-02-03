@@ -1,0 +1,52 @@
+.hive-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.no-hives {
+  color: #999;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.hive-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #f8f9fa;
+  border: 2px solid transparent;
+}
+
+.hive-item:hover {
+  background: #e9ecef;
+}
+
+.hive-item.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+}
+
+.hive-icon {
+  font-size: 1.5rem;
+}
+
+.hive-info {
+  flex: 1;
+}
+
+.hive-name {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.hive-location {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}

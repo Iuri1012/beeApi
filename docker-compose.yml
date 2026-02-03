@@ -1,0 +1,103 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: beeapi-mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./docker/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-logs:/mosquitto/log
+    networks:
+      - beeapi-network
+
+  postgres:
+    image: timescale/timescaledb:latest-pg15
+    container_name: beeapi-postgres
+    environment:
+      POSTGRES_DB: beeapi
+      POSTGRES_USER: beeapi
+      POSTGRES_PASSWORD: beeapi123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./timeseries/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - beeapi-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U beeapi"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: beeapi-backend
+    environment:
+      DATABASE_URL: postgresql://beeapi:beeapi123@postgres:5432/beeapi
+      MQTT_BROKER: mosquitto
+      MQTT_PORT: 1883
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mosquitto:
+        condition: service_started
+    networks:
+      - beeapi-network
+    volumes:
+      - ./backend:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  telemetry:
+    build:
+      context: ./telemetry
+      dockerfile: Dockerfile
+    container_name: beeapi-telemetry
+    environment:
+      DATABASE_URL: postgresql://beeapi:beeapi123@postgres:5432/beeapi
+      MQTT_BROKER: mosquitto
+      MQTT_PORT: 1883
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mosquitto:
+        condition: service_started
+    networks:
+      - beeapi-network
+    volumes:
+      - ./telemetry:/app
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: beeapi-web
+    environment:
+      REACT_APP_API_URL: http://localhost:8000
+      REACT_APP_WS_URL: ws://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - beeapi-network
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    stdin_open: true
+    tty: true
+
+networks:
+  beeapi-network:
+    driver: bridge
+
+volumes:
+  mosquitto-data:
+  mosquitto-logs:
+  postgres-data:
