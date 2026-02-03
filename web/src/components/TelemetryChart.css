@@ -1,0 +1,25 @@
+.telemetry-chart h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.chart-container {
+  margin-bottom: 2rem;
+}
+
+.chart-container h4 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.no-chart-data {
+  text-align: center;
+  padding: 3rem;
+  color: #999;
+}
+
+.no-chart-data p {
+  font-size: 1.1rem;
+}
