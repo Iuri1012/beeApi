@@ -19,21 +19,21 @@ fi
 
 echo -e "${GREEN}✓ Docker is running${NC}"
 
-# Check if docker-compose exists
-if ! command -v docker-compose &> /dev/null; then
-    echo "❌ docker-compose not found. Please install docker-compose."
+# Check if docker compose exists
+if ! docker compose version &> /dev/null; then
+    echo "❌ docker compose not found. Please install docker compose."
     exit 1
 fi
 
-echo -e "${GREEN}✓ docker-compose found${NC}"
+echo -e "${GREEN}✓ docker compose found${NC}"
 
 # Stop any existing containers
 echo -e "${YELLOW}Stopping any existing containers...${NC}"
-docker-compose down 2>/dev/null || true
+docker compose down 2>/dev/null || true
 
 # Start services
-echo -e "${YELLOW}Starting services with docker-compose...${NC}"
-docker-compose up -d
+echo -e "${YELLOW}Starting services with docker compose...${NC}"
+docker compose up -d
 
 # Wait for services to be ready
 echo -e "${YELLOW}Waiting for services to be ready...${NC}"
@@ -41,13 +41,13 @@ echo -e "${YELLOW}Waiting for services to be ready...${NC}"
 # Wait for PostgreSQL
 echo "Waiting for PostgreSQL..."
 for i in {1..30}; do
-    if docker-compose exec -T postgres pg_isready -U beeapi > /dev/null 2>&1; then
+    if docker compose exec -T postgres pg_isready -U beeapi > /dev/null 2>&1; then
         echo -e "${GREEN}✓ PostgreSQL is ready${NC}"
         break
     fi
     if [ $i -eq 30 ]; then
         echo "❌ PostgreSQL failed to start in time"
-        docker-compose logs postgres
+        docker compose logs postgres
         exit 1
     fi
     sleep 1
@@ -62,7 +62,7 @@ for i in {1..60}; do
     fi
     if [ $i -eq 60 ]; then
         echo "❌ Backend failed to start in time"
-        docker-compose logs backend
+        docker compose logs backend
         exit 1
     fi
     sleep 1
@@ -126,8 +126,8 @@ fi
 
 echo ""
 echo -e "${YELLOW}To stop all services:${NC}"
-echo "  docker-compose down"
+echo "  docker compose down"
 echo ""
 echo -e "${YELLOW}To view logs:${NC}"
-echo "  docker-compose logs -f [service-name]"
+echo "  docker compose logs -f [service-name]"
 echo ""

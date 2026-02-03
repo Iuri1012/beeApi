@@ -88,17 +88,17 @@ jobs:
       
       - name: Build Docker images
         run: |
-          docker-compose build
+          docker compose build
       
       - name: Start services
         run: |
-          docker-compose up -d
+          docker compose up -d
       
       - name: Wait for services
         run: |
           echo "Waiting for PostgreSQL..."
           for i in {1..30}; do
-            if docker-compose exec -T postgres pg_isready -U beeapi; then
+            if docker compose exec -T postgres pg_isready -U beeapi; then
               echo "PostgreSQL is ready"
               break
             fi
@@ -127,9 +127,9 @@ jobs:
       - name: Show logs on failure
         if: failure()
         run: |
-          docker-compose logs
+          docker compose logs
       
       - name: Stop services
         if: always()
         run: |
-          docker-compose down -v
+          docker compose down -v
