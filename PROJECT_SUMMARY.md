@@ -137,7 +137,7 @@ beeApi/
 
 ### Backend
 - Python 3.11
-- FastAPI 0.109.0
+- FastAPI 0.109.1
 - Uvicorn 0.27.0
 - AsyncPG 0.29.0
 - Pydantic 2.5.3

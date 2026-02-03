@@ -143,7 +143,7 @@ cd beeApi
 | Message Client | paho-mqtt | 1.6.1 |
 | Database | PostgreSQL | 15 |
 | Time-Series | TimescaleDB | Latest |
-| Backend | FastAPI | 0.109.0 |
+| Backend | FastAPI | 0.109.1 |
 | API Server | Uvicorn | 0.27.0 |
 | DB Driver | AsyncPG | 0.29.0 |
 | Frontend | React | 18.2.0 |

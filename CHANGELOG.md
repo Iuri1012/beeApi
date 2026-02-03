@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-02-03
+
+### Security
+
+- Updated FastAPI from 0.109.0 to 0.109.1 to fix ReDoS vulnerability (CVE)
+- Updated python-multipart from 0.0.6 to 0.0.22 to fix multiple vulnerabilities:
+  - Arbitrary file write vulnerability
+  - DoS via malformed multipart/form-data boundary
+  - Content-Type header ReDoS vulnerability
+
 ## [1.0.0] - 2026-02-03
 
 ### Added
@@ -96,7 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Backend Stack:**
 - Python 3.11
-- FastAPI 0.109.0
+- FastAPI 0.109.1
 - AsyncPG 0.29.0
 - Pydantic 2.5.3
 - Uvicorn
