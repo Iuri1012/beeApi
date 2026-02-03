@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeeAPI Dashboard - UI Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f7fa;
+        }
+        .app-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .app-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .status-indicator {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+        .container {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: fit-content;
+        }
+        .sidebar h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #333;
+        }
+        .hive-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f8f9fa;
+        }
+        .hive-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .hive-icon {
+            font-size: 1.5rem;
+        }
+        .hive-info {
+            flex: 1;
+        }
+        .hive-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .hive-location {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        .main-content {
+            flex: 1;
+        }
+        .hive-header {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .hive-header h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .location {
+            color: #666;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .metric-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.25rem;
+        }
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .charts {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .charts h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        .chart-container {
+            margin-bottom: 2rem;
+        }
+        .chart-container h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+        .chart-placeholder {
+            height: 200px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            position: relative;
+            overflow: hidden;
+        }
+        .chart-line {
+            position: absolute;
+            bottom: 20px;
+            left: 40px;
+            right: 40px;
+            height: 120px;
+            background: 
+                linear-gradient(to right, 
+                    transparent 0%, 
+                    transparent 10%, 
+                    #ff6b6b 10%, 
+                    #ff6b6b 11%, 
+                    transparent 11%,
+                    transparent 25%,
+                    #ff6b6b 25%,
+                    #ff6b6b 26%,
+                    transparent 26%,
+                    transparent 50%,
+                    #ff6b6b 50%,
+                    #ff6b6b 51%,
+                    transparent 51%,
+                    transparent 75%,
+                    #ff6b6b 75%,
+                    #ff6b6b 76%,
+                    transparent 76%
+                );
+        }
+        .chart-axis {
+            position: absolute;
+            left: 40px;
+            bottom: 20px;
+            right: 40px;
+            height: 1px;
+            background: #ddd;
+        }
+        .chart-axis-y {
+            position: absolute;
+            left: 40px;
+            bottom: 20px;
+            width: 1px;
+            height: 140px;
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <h1>🐝 BeeAPI Dashboard</h1>
+        <div class="status-indicator">● Live</div>
+    </header>
+    
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Hives</h2>
+            <div class="hive-item active">
+                <div class="hive-icon">🐝</div>
+                <div class="hive-info">
+                    <div class="hive-name">Test Hive Alpha</div>
+                    <div class="hive-location">Apiary A</div>
+                </div>
+            </div>
+            <div class="hive-item">
+                <div class="hive-icon">🐝</div>
+                <div class="hive-info">
+                    <div class="hive-name">Hive Beta</div>
+                    <div class="hive-location">Apiary B</div>
+                </div>
+            </div>
+            <div class="hive-item">
+                <div class="hive-icon">🐝</div>
+                <div class="hive-info">
+                    <div class="hive-name">Garden Hive</div>
+                    <div class="hive-location">Garden Plot</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="hive-header">
+                <h2>Test Hive Alpha</h2>
+                <p class="location">📍 Apiary A</p>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">🌡️</div>
+                    <div class="metric-value">35.5°C</div>
+                    <div class="metric-label">Temperature</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">💧</div>
+                    <div class="metric-value">62.3%</div>
+                    <div class="metric-label">Humidity</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">⚖️</div>
+                    <div class="metric-value">45.2 kg</div>
+                    <div class="metric-label">Weight</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">🔊</div>
+                    <div class="metric-value">48.7 dB</div>
+                    <div class="metric-label">Sound Level</div>
+                </div>
+            </div>
+
+            <div class="charts">
+                <h3>Live Telemetry</h3>
+                
+                <div class="chart-container">
+                    <h4>Temperature & Humidity</h4>
+                    <div class="chart-placeholder">
+                        <div class="chart-axis-y"></div>
+                        <div class="chart-axis"></div>
+                        <div class="chart-line"></div>
+                        Time-series chart with real-time updates
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h4>Weight</h4>
+                    <div class="chart-placeholder">
+                        <div class="chart-axis-y"></div>
+                        <div class="chart-axis"></div>
+                        Stable weight trend over time
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h4>Sound Level</h4>
+                    <div class="chart-placeholder">
+                        <div class="chart-axis-y"></div>
+                        <div class="chart-axis"></div>
+                        Sound activity variations
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -61,23 +61,6 @@ This document confirms the successful implementation of the BeeAPI PoC monorepo 
 - [x] Real-time updates via WebSocket
 - [x] All components working together
 
-## File Statistics
-
-```
-Total Files Created: 50+
-Lines of Code: 2,500+
-
-Breakdown:
-- Python files: 6 (firmware, backend, telemetry, tests)
-- JavaScript/React: 8 (App, components)
-- SQL: 1 (schema with hypertables)
-- Docker: 3 (Dockerfiles)
-- Docker Compose: 1
-- Shell scripts: 3
-- Markdown docs: 10+
-- Config files: 5+
-```
-
 ## Repository Structure
 
 ```
