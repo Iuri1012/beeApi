@@ -49,6 +49,11 @@ build/
 # Docker
 .env
 
+# Firebase (SENSITIVE - never commit!)
+firebase-key.json
+*-firebase-key.json
+*.firebase.json
+
 # Logs
 *.log
 

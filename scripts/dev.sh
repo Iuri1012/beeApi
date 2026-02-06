@@ -31,12 +31,9 @@ function setup_backend() {
     echo "Setting up Backend..."
     cd backend
     
-    if [ ! -d "venv" ]; then
-        python3 -m venv venv
-        source venv/bin/activate
-        pip install -r requirements.txt
-    else
-        source venv/bin/activate
+    # Use Poetry for dependency management
+    if [ ! -f "poetry.lock" ]; then
+        poetry install
     fi
     
     export DATABASE_URL="postgresql://beeapi:beeapi123@localhost:5432/beeapi"
@@ -45,19 +42,16 @@ function setup_backend() {
     
     echo "Starting backend on http://localhost:8000"
     echo "API docs: http://localhost:8000/docs"
-    uvicorn main:app --reload
+    poetry run uvicorn main:app --reload
 }
 
 function setup_telemetry() {
     echo "Setting up Telemetry Consumer..."
     cd telemetry
     
-    if [ ! -d "venv" ]; then
-        python3 -m venv venv
-        source venv/bin/activate
-        pip install -r requirements.txt
-    else
-        source venv/bin/activate
+    # Use Poetry for dependency management
+    if [ ! -f "poetry.lock" ]; then
+        poetry install
     fi
     
     export DATABASE_URL="postgresql://beeapi:beeapi123@localhost:5432/beeapi"
@@ -65,7 +59,7 @@ function setup_telemetry() {
     export MQTT_PORT="1883"
     
     echo "Starting telemetry consumer..."
-    python consumer.py
+    poetry run python consumer.py
 }
 
 function setup_web() {
@@ -87,16 +81,13 @@ function setup_simulator() {
     echo "Setting up Firmware Simulator..."
     cd firmware
     
-    if [ ! -d "venv" ]; then
-        python3 -m venv venv
-        source venv/bin/activate
-        pip install -r requirements.txt
-    else
-        source venv/bin/activate
+    # Use Poetry for dependency management
+    if [ ! -f "poetry.lock" ]; then
+        poetry install
     fi
     
     echo "Starting simulator..."
-    python simulator.py --device-id hive-001 --broker localhost --interval 5
+    poetry run python simulator.py --device-id hive-001 --broker localhost --interval 5
 }
 
 function show_all() {

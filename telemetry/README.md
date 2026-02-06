@@ -1,17 +1,31 @@
 # Telemetry Consumer
 
-MQTT consumer that subscribes to beehive telemetry and stores it in TimescaleDB.
+> MQTT consumer that subscribes to beehive telemetry and stores it in TimescaleDB
 
-## Installation
+## 🚀 Installation
 
 ```bash
-pip install -r requirements.txt
+poetry install              # Install dependencies
+poetry shell               # Activate environment
+python consumer.py         # Run consumer
 ```
 
-## Running
+## 📖 Poetry Commands
 
 ```bash
-python consumer.py
+# Setup
+poetry install              # Install dependencies
+poetry env info            # View environment info
+
+# Running
+poetry shell               # Activate environment
+python consumer.py         # Run consumer
+# or
+poetry run python consumer.py  # Run without activating
+
+# Development
+poetry add package         # Add dependency
+poetry show               # List installed packages
 ```
 
 ## Environment Variables

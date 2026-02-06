@@ -1,34 +1,29 @@
+-- TimescaleDB Database Schema for BeeAPI v2.0
+-- This database stores ONLY time-series telemetry data
+
 -- Initialize TimescaleDB extension
 CREATE EXTENSION IF NOT EXISTS timescaledb;
 
--- Devices/Hives table
-CREATE TABLE IF NOT EXISTS hives (
-    id SERIAL PRIMARY KEY,
-    device_id VARCHAR(255) UNIQUE NOT NULL,
-    name VARCHAR(255),
-    location VARCHAR(255),
-    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Telemetry readings hypertable
+-- ==================== TELEMETRY READINGS HYPERTABLE ====================
+-- Note: device_id references hives.device_id in the PostgreSQL database
+-- We don't enforce foreign key constraints across databases
 CREATE TABLE IF NOT EXISTS readings (
     time TIMESTAMPTZ NOT NULL,
     device_id VARCHAR(255) NOT NULL,
     temperature DOUBLE PRECISION,
     humidity DOUBLE PRECISION,
     weight DOUBLE PRECISION,
-    sound_level DOUBLE PRECISION,
-    FOREIGN KEY (device_id) REFERENCES hives(device_id) ON DELETE CASCADE
+    sound_level DOUBLE PRECISION
 );
 
--- Convert to hypertable
+-- Convert to hypertable for optimized time-series queries
 SELECT create_hypertable('readings', 'time', if_not_exists => TRUE);
 
--- Create indexes for better query performance
+-- ==================== INDEXES ====================
 CREATE INDEX IF NOT EXISTS idx_readings_device_id_time ON readings (device_id, time DESC);
-CREATE INDEX IF NOT EXISTS idx_hives_device_id ON hives (device_id);
+CREATE INDEX IF NOT EXISTS idx_readings_time ON readings (time DESC);
 
--- Create continuous aggregate for hourly averages
+-- ==================== CONTINUOUS AGGREGATE FOR HOURLY AVERAGES ====================
 CREATE MATERIALIZED VIEW IF NOT EXISTS readings_hourly
 WITH (timescaledb.continuous) AS
 SELECT
@@ -39,7 +34,10 @@ SELECT
     AVG(weight) AS avg_weight,
     AVG(sound_level) AS avg_sound_level,
     MAX(temperature) AS max_temperature,
-    MIN(temperature) AS min_temperature
+    MIN(temperature) AS min_temperature,
+    MAX(humidity) AS max_humidity,
+    MIN(humidity) AS min_humidity,
+    COUNT(*) AS reading_count
 FROM readings
 GROUP BY bucket, device_id;
 
@@ -50,7 +48,16 @@ SELECT add_continuous_aggregate_policy('readings_hourly',
     schedule_interval => INTERVAL '1 hour',
     if_not_exists => TRUE);
 
--- Insert sample hive for testing
-INSERT INTO hives (device_id, name, location) 
-VALUES ('hive-001', 'Test Hive Alpha', 'Apiary A')
-ON CONFLICT (device_id) DO NOTHING;
+-- ==================== DATA RETENTION POLICY (OPTIONAL) ====================
+-- Uncomment to automatically drop old data after 1 year
+-- SELECT add_retention_policy('readings', INTERVAL '1 year', if_not_exists => TRUE);
+
+-- Log initialization
+DO $$
+BEGIN
+    RAISE NOTICE 'TimescaleDB initialized successfully';
+    RAISE NOTICE 'Hypertable: readings (optimized for time-series data)';
+    RAISE NOTICE 'Continuous aggregate: readings_hourly';
+END $$;
+
+

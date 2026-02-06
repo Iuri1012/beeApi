@@ -1,17 +1,38 @@
 # Firmware Simulator
 
-Simulates beehive IoT devices that publish telemetry data via MQTT.
+> Simulates beehive IoT devices that publish telemetry data via MQTT
 
-## Installation
+## 🚀 Installation
 
 ```bash
-pip install -r requirements.txt
+poetry install              # Install dependencies
+poetry shell               # Activate environment
+python simulator.py --device-id hive-001  # Run simulator
 ```
 
-## Usage
+## 📖 Poetry Commands
 
 ```bash
-python simulator.py --device-id hive-001 --broker localhost --interval 5
+# Setup
+poetry install              # Install dependencies
+poetry env info            # View environment info
+
+# Running
+poetry shell               # Activate environment
+python simulator.py --device-id hive-001  # Run simulator
+# or
+poetry run python simulator.py --device-id hive-001  # Run without activating
+
+# Development
+poetry add package         # Add dependency
+poetry show               # List installed packages
+```
+
+## 💻 Usage
+
+### Basic Usage
+```bash
+poetry run python simulator.py --device-id hive-001 --broker localhost --interval 5
 ```
 
 Options:
