@@ -25,6 +25,11 @@ wheels/
 .pytest_cache/
 .mypy_cache/
 
+# Poetry
+poetry.toml
+.venv/
+.poetry/
+
 # Node
 node_modules/
 npm-debug.log*
