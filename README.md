@@ -42,8 +42,48 @@ This will:
 ### Prerequisites
 
 - Docker and Docker Compose
-- Python 3.9+
+- Python 3.9+ 
 - Node.js 16+
+- **Poetry** (recomendado para Python) - `brew install poetry`
+
+### Package Management
+
+O projeto usa Poetry para gerenciamento de dependências Python:
+
+**Backend:**
+```bash
+cd backend
+poetry install && poetry shell
+python main.py
+```
+
+**Telemetry Consumer:**
+```bash
+cd telemetry  
+poetry install && poetry shell
+python consumer.py
+```
+
+**Firmware Simulator:**
+```bash
+cd firmware
+poetry install && poetry shell  
+python simulator.py --device-id hive-001
+```
+
+Ou use os scripts de desenvolvimento:
+```bash
+./scripts/dev.sh backend    # Inicia backend
+./scripts/dev.sh telemetry  # Inicia consumer
+./scripts/dev.sh simulator  # Inicia firmware
+```
+
+### 📖 Guias de Desenvolvimento
+
+- **[📚 Central de Documentação](docs/README.md)** - Índice completo e organizado
+- **[🚀 Quick Start](docs/guides/QUICKSTART.md)** - Setup em 5 minutos
+- **[🔥 Backend Docs](backend/docs/README.md)** - Documentação completa do backend
+- **[🏗️ Arquitetura](docs/architecture/DATABASE_ARCHITECTURE.md)** - Estrutura dos bancos
 
 ### Running Individual Services
 

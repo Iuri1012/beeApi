@@ -97,31 +97,23 @@ echo ""
 
 # Check if Python is available
 if command -v python3 &> /dev/null; then
-    # Install dependencies if needed
-    if [ ! -d "firmware/venv" ]; then
-        echo "Creating Python virtual environment..."
-        cd firmware
-        python3 -m venv venv
-        source venv/bin/activate
-        pip install -r requirements.txt > /dev/null 2>&1
-        cd ..
-    fi
-    
     # Run simulator
     echo -e "${GREEN}Running simulator for device hive-001...${NC}"
     echo "Press Ctrl+C to stop the simulator and view logs"
     echo ""
     
     cd firmware
-    source venv/bin/activate
-    python simulator.py --device-id hive-001 --broker localhost --interval 5
+    
+    # Use Poetry for package management
+    echo "Using Poetry for firmware simulator..."
+    poetry install > /dev/null 2>&1 || true
+    poetry run python simulator.py --device-id hive-001 --broker localhost --interval 5
 else
     echo "⚠️  Python3 not found. Please install Python to run the simulator."
     echo ""
     echo "To run simulator manually:"
     echo "  cd firmware"
-    echo "  pip install -r requirements.txt"
-    echo "  python simulator.py --device-id hive-001 --broker localhost"
+    echo "  poetry install && poetry run python simulator.py --device-id hive-001"
 fi
 
 echo ""
